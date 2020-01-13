@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-#Hernando Martinez Vergara
-#June 2019
+# Hernando Martinez Vergara
+# June 2019
 
 # Transform all files specified using the first one to guide registration
 
@@ -23,30 +23,27 @@ allenrefFolder = '/mnt/c/Users/herny/Desktop/SWC/Data/Anatomy/ARA_25_micron_mhd/
 allenrefName = 'template.mhd'
 allenRaw = 'template.raw'
 
-#copy parameter files
-shutil.copy(paramFolder+paramAffName, './')
-shutil.copy(paramFolder+paramBSName, './')
+# copy parameter files
+shutil.copy(paramFolder + paramAffName, './')
+shutil.copy(paramFolder + paramBSName, './')
 
-#copy reference
-shutil.copy(allenrefFolder+allenrefName, './')
-shutil.copy(allenrefFolder+allenRaw, './')
+# copy reference
+shutil.copy(allenrefFolder + allenrefName, './')
+shutil.copy(allenrefFolder + allenRaw, './')
 
-
-
-
-#get the input file and perform the registration
+# get the input file and perform the registration
 if len(sys.argv) < 2:
     sys.exit('Not enough arguments, tell me at least one channel')
 
 leadChannel = sys.argv[1]
 print(leadChannel)
 RegCommand = '{0} -f {1} -m {2} -p {3} -p {4} -out {5}'.format(
-        elastixPath,
-        allenrefName,
-        leadChannel,
-        paramAffName,
-        paramBSName,
-        './')
+    elastixPath,
+    allenrefName,
+    leadChannel,
+    paramAffName,
+    paramBSName,
+    './')
 print('Running elastix')
 print(RegCommand)
 os.system(RegCommand)
@@ -62,10 +59,10 @@ print('***** Applying transformation to other channels ******')
 for channel in sys.argv[2:len(sys.argv)]:
     print('Transforming ' + channel)
     TraCom = '{0} -in {1} -out {2} -tp {3}'.format(
-            transformixPath,
-            channel,
-            './',
-            './TransformParameters.1.txt')
+        transformixPath,
+        channel,
+        './',
+        './TransformParameters.1.txt')
     print('Running transformix')
     print(TraCom)
     os.system(TraCom)
@@ -75,11 +72,6 @@ for channel in sys.argv[2:len(sys.argv)]:
     channelOut = filename + '_reg.tif'
     os.system('mv result.tiff {0}'.format(channelOut))
 
-#clean up
+# clean up
 os.system('rm IterationInfo*')
 os.system('rm {0} {1}'.format(allenRaw, allenrefName))
-    
-
-
-
-
